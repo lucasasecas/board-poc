@@ -33,10 +33,6 @@ class NoteVM {
   posX = ko.observable<number>();
   posY = ko.observable<number>();
 
-  constructor(id: string = null) {
-    this.id = id || randomString();
-  }
-
   update(plain: INote) {
     this.title(plain.title);
     this.content(plain.content);
@@ -59,21 +55,22 @@ class BoardVM {
   color = ko.observable("");
   notes = ko.observableArray<NoteVM>([]);
 
+  // TODO: consider to remove this index
   private notesById: { [id: string]: NoteVM; } = {};
 
-  constructor() {
-    this.notes.subscribe<KnockoutArrayChange<NoteVM>[]>(data => {
-      for (var i in data) {
-        var item = data[i];
-        var noteVM = item.value;
-        console.log(item);
-        if (item.status == "added") {
-          this.notesById[noteVM.id] = noteVM;
-        } else if (item.status == "deleted") {
-          delete this.notesById[noteVM.id];
-        }
-      }
-    }, null, "arrayChange");
+  createNote(id: string = null) : NoteVM {
+    id = id || randomString();
+    var note = new NoteVM();
+    note.id = id;
+    this.notesById[id] = note;
+    this.notes.push(note);
+    return note;
+  }
+
+  deleteNote(id: string) {
+    var note = this.notesById[id];
+    delete this.notesById[id];
+    this.notes.remove(note);
   }
 
   update(plain: IBoard) {
@@ -83,14 +80,15 @@ class BoardVM {
     for (var id in plain.notes) {
       var noteVM = this.notesById[id];
       if (!noteVM) {
-        // add
-        noteVM = new NoteVM(id);
-        this.notes.push(noteVM);
+        noteVM = this.createNote(id);
       }
-      // update
       noteVM.update(plain.notes[id]);
     }
-    this.notes.remove(noteVM => !plain.notes[noteVM.id]);
+    for (var id in this.notesById) {
+      if (!plain.notes[id]) {
+        this.deleteNote(id);
+      }
+    }
   }
 
   toPlain(): IBoard {
