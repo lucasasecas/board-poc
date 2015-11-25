@@ -11,6 +11,7 @@
   ],
   "files": [
     "src\\greeter.ts",
+    "src\\scripts.ts",
     "src\\_defaults.d.ts",
     "src\\_tsd.d.ts"
   ]
