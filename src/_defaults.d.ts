@@ -1,4 +1,4 @@
 declare var rfc6902 : {
-  createPatch : (input : any, output : any)  => any;
-  applyPatch : (output : any, patch : any) => any;
+  createPatch : (initial: any, final: any)  => any;
+  applyPatch : (destination: any, patch: any) => void;
 };

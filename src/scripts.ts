@@ -114,14 +114,18 @@ ko.applyBindings(board);
 
 console.log("Add two notes...");
 
-board.update({
+var original = <IBoard>{
   color: "#AAAAAA",
   name: "name",
   notes: {
     "abc1": { title: "abc1", content: "string", posX: 10, posY: 20 },
     "abc2": { title: "abc2", content: "zdfdfdsf", posX: 20, posY: 30 }
   }
-});
+};
+
+(<any>window).o = original;
+
+board.update(original);
 
 console.log("Edit both notes...");
 
@@ -147,5 +151,15 @@ board.update({
 
 (<any>window).b = board;
 
-console.log(board.toPlain());
+console.log("******************");
 
+var revertPatch = rfc6902.createPatch(board.toPlain(), original);
+var revertedBoard = board.toPlain();
+rfc6902.applyPatch(revertedBoard, revertPatch);
+var shouldBeEmptyPatch = rfc6902.createPatch(revertedBoard, original);
+console.log({
+  revertPatch: revertPatch,
+  currentBoard: board.toPlain(),
+  revertedBoard: revertedBoard,
+  original: original,
+  shouldBeEmptyPatch: shouldBeEmptyPatch });
