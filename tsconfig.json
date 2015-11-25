@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "./lib",
+    "outFile": "./lib/scripts.js",
     "preserveConstEnums": true,
     "removeComments": true
   },
@@ -12,6 +10,8 @@
     "src/**/*.ts"
   ],
   "files": [
-    "src\\greeter.ts"
+    "src\\greeter.ts",
+    "src\\_defaults.d.ts",
+    "src\\_tsd.d.ts"
   ]
 }

@@ -4,8 +4,6 @@ class Greeter {
     this.greeting = message;
   }
   greet() {
-    return 'Bonjour, ' + this.greeting + '!';
+    return "Bonjour, " + this.greeting + "!";
   }
 }
-
-export = Greeter;

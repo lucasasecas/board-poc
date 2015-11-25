@@ -1,0 +1,21 @@
+{
+  "name": "board-poc",
+  "version": "0.0.0",
+  "authors": [
+    "Andres Moschini <andresmoschini@gmail.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout": "~3.4.0"
+  }
+}
