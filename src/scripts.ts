@@ -192,23 +192,17 @@ var shadow = <IBoard>{
 
 board.update(shadow);
 
-/*
-var revertPatch = rfc6902.createPatch(board.toPlain(), original);
-var revertedBoard = board.toPlain();
-rfc6902.applyPatch(revertedBoard, revertPatch);
-var shouldBeEmptyPatch = rfc6902.createPatch(revertedBoard, original);
-console.log({
-  revertPatch: revertPatch,
-  currentBoard: board.toPlain(),
-  revertedBoard: revertedBoard,
-  original: original,
-  shouldBeEmptyPatch: shouldBeEmptyPatch });
-*/
+declare var io : any;
+
+var socket = io();
 
 var count = 0;
+var interval = 1000;
+var logInterval = 10000;
 setInterval(() => {
-  var myChanges = rfc6902.createPatch(board.toPlain(), shadow);
-  if (!(count++ % 100)) { // only each 100 times (each 10 seconds)
+  var myChanges = rfc6902.createPatch(shadow, board.toPlain());
+  socket.emit("board", { patch: myChanges });
+  if (!(count++ % (logInterval / interval)) {
     console.log(myChanges);
   }
-}, 100); // 10 times by second
+}, interval); 
