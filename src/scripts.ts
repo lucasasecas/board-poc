@@ -86,7 +86,7 @@ class NoteVM {
     return {
       top: posY ? `${posY}px` : "0",
       left: posX ? `${posX}px` : "0",
-      display: posX && posY ? "block" : "none"
+      display: posX != null && posY != null  ? "block" : "none"
     };
   });
 
@@ -114,6 +114,13 @@ class BoardVM {
 
   // TODO: consider to remove this index
   private notesById: { [id: string]: NoteVM; } = {};
+
+  newNote = () => {
+    var note = this.createNote();
+    note.posX(0);
+    note.posY(0);
+    return note;
+  };
 
   createNote(id: string = null) : NoteVM {
     id = id || randomString();
@@ -174,7 +181,7 @@ ko.applyBindings(board);
 
 console.log("Add two notes...");
 
-var original = <IBoard>{
+var shadow = <IBoard>{
   color: "#AAAAAA",
   name: "name",
   notes: {
@@ -183,36 +190,9 @@ var original = <IBoard>{
   }
 };
 
-(<any>window).o = original;
+board.update(shadow);
 
-board.update(original);
-
-console.log("Edit both notes...");
-
-board.update({
-  color: "#AAAAAA",
-  name: "name",
-  notes: {
-    "abc1": { title: "abc1", content: "2", posX: 10, posY: 20 },
-    "abc2": { title: "abc2", content: "2", posX: 20, posY: 30 }
-  }
-});
-
-console.log("Remove a note and add another...");
-
-board.update({
-  color: "#AAAAAA",
-  name: "name",
-  notes: {
-    "abc2": { title: "abc2", content: "2", posX: 200, posY: 50 },
-    "abc3": { title: "abc1", content: "2", posX: 250, posY: 200 }
-  }
-});
-
-(<any>window).b = board;
-
-console.log("******************");
-
+/*
 var revertPatch = rfc6902.createPatch(board.toPlain(), original);
 var revertedBoard = board.toPlain();
 rfc6902.applyPatch(revertedBoard, revertPatch);
@@ -223,3 +203,12 @@ console.log({
   revertedBoard: revertedBoard,
   original: original,
   shouldBeEmptyPatch: shouldBeEmptyPatch });
+*/
+
+var count = 0;
+setInterval(() => {
+  var myChanges = rfc6902.createPatch(board.toPlain(), shadow);
+  if (!(count++ % 100)) { // only each 100 times (each 10 seconds)
+    console.log(myChanges);
+  }
+}, 100); // 10 times by second
