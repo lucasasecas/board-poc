@@ -13,6 +13,47 @@ function randomString(length: number = 8) : string {
     return str;
 }
 
+(function() {
+  var addEvent = (el: any, type: any, fn: any) => {
+    if (el && el.nodeName || el === window) {
+      el.addEventListener(type, fn, false);
+    } else if (el && el.length) {
+      for (var i = 0; i < el.length; i++) {
+        addEvent(el[i], type, fn);
+      }
+    }
+  };
+  var _dragged: any;
+  var correctionX: number;
+  var correctionY: number;
+  (<any>ko.bindingHandlers).drag = {
+    init: function(element: any, valueAccessor: any, allBindingsAccessor: any, viewModel: any) {
+      element.setAttribute("draggable", "true");
+      addEvent(element, "dragstart", function (e: any) {
+        e.dataTransfer.setData("data", "data"); // required to drag
+        correctionX = e.clientX - viewModel.posX();
+        correctionY = e.clientY - viewModel.posY();
+        _dragged = viewModel;
+      });
+    }
+  };
+
+  (<any>ko.bindingHandlers).drop = {
+    init: function(element: any, valueAccessor: any, allBindingsAccessor: any, viewModel: any) {
+      addEvent(element, "dragover", function (e: any) {
+        e.preventDefault(); // allows us to drop
+        return false;
+      });
+
+      addEvent(element, "drop", function (e: any) {
+        _dragged.posX(e.clientX - correctionX);
+        _dragged.posY(e.clientY - correctionY);
+        return false;
+      });
+    }
+  };
+})();
+
 interface INote {
   title: string;
   content: string;
@@ -26,12 +67,28 @@ interface IBoard {
   notes: { [id: string]: INote; };
 }
 
+interface INoteVMStyle {
+  top: string;
+  left: string;
+  display: string;
+}
+
 class NoteVM {
   id: string;
   title = ko.observable("");
   content = ko.observable("");
   posX = ko.observable<number>();
   posY = ko.observable<number>();
+
+  style = ko.computed<INoteVMStyle>(() => {
+    var posX = this.posX();
+    var posY = this.posY();
+    return {
+      top: posY ? `${posY}px` : "0",
+      left: posX ? `${posX}px` : "0",
+      display: posX && posY ? "block" : "none"
+    };
+  });
 
   update(plain: INote) {
     this.title(plain.title);
@@ -76,6 +133,9 @@ class BoardVM {
   update(plain: IBoard) {
     this.name(plain.name);
     this.color(plain.color);
+
+    // TODO: update observeble array only a time
+
     // assuming that json.notes has value
     for (var id in plain.notes) {
       var noteVM = this.notesById[id];
@@ -144,8 +204,8 @@ board.update({
   color: "#AAAAAA",
   name: "name",
   notes: {
-    "abc2": { title: "abc2", content: "2", posX: 20, posY: 30 },
-    "abc3": { title: "abc1", content: "2", posX: 10, posY: 20 }
+    "abc2": { title: "abc2", content: "2", posX: 200, posY: 50 },
+    "abc3": { title: "abc1", content: "2", posX: 250, posY: 200 }
   }
 });
 

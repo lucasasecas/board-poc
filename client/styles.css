@@ -1,0 +1,17 @@
+.board {
+  height: 500px;
+  width: 100%;
+  position: relative;
+}
+
+.note {
+  position: absolute;
+  background-color: yellow;
+}
+
+ul.note,
+ul.note > li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

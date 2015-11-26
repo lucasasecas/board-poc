@@ -10,6 +10,21 @@
 
 <body>
 
+  <div>
+    <ul>
+      <li><label>Name:<input type="text" data-bind="textInput: name" /></label></li>
+      <li><label>Color:<input type="text" data-bind="textInput: color" /></label></li>
+    </ul>
+    <div class="board" data-bind="drop: true, foreach: notes">
+      <ul class="note" data-bind="drag: true, style: style">
+        <li><label>Title:<input type="text" data-bind="textInput: title" /></label></li>
+        <li><label>Content:<input type="text" data-bind="textInput: content" /></label></li>
+        <li><label>PosX:<input type="text" data-bind="textInput: posX" /></label></li>
+        <li><label>PosY:<input type="text" data-bind="textInput: posY" /></label></li>
+      </ul>
+    </div>
+  </div>
+  
   Plain:
   <pre data-bind="text: ko.toJSON($root.toPlain(), null, 2)"></pre>
   
