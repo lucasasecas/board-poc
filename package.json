@@ -14,7 +14,9 @@
   "scripts": {
     "test": "gulp test"
   },
-  "dependencies": {},
+  "dependencies": {
+    "rfc6902": "^1.0.8"
+  },
   "devDependencies": {
     "del": "2.0.2",
     "gulp": "^3.9.0",

@@ -144,15 +144,16 @@ class BoardVM {
     // TODO: update observeble array only a time
 
     // assuming that json.notes has value
-    for (var id in plain.notes) {
+    var notes = plain.notes || {};
+    for (var id in notes) {
       var noteVM = this.notesById[id];
       if (!noteVM) {
         noteVM = this.createNote(id);
       }
-      noteVM.update(plain.notes[id]);
+      noteVM.update(notes[id]);
     }
     for (var id in this.notesById) {
-      if (!plain.notes[id]) {
+      if (!notes[id]) {
         this.deleteNote(id);
       }
     }
@@ -181,14 +182,7 @@ ko.applyBindings(board);
 
 console.log("Add two notes...");
 
-var shadow = <IBoard>{
-  color: "#AAAAAA",
-  name: "name",
-  notes: {
-    "abc1": { title: "abc1", content: "string", posX: 10, posY: 20 },
-    "abc2": { title: "abc2", content: "zdfdfdsf", posX: 20, posY: 30 }
-  }
-};
+var shadow = <IBoard>{};
 
 board.update(shadow);
 
@@ -201,8 +195,10 @@ var interval = 1000;
 var logInterval = 10000;
 setInterval(() => {
   var myChanges = rfc6902.createPatch(shadow, board.toPlain());
-  socket.emit("board", { patch: myChanges });
-  if (!(count++ % (logInterval / interval)) {
+  if (myChanges.length) {
+    socket.emit("board", { patch: myChanges });
+  }
+  if (!(count++ % (logInterval / interval))) {
     console.log(myChanges);
   }
-}, interval); 
+}, interval);
