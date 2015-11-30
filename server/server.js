@@ -5,7 +5,7 @@ var app = express.static(__dirname + "/../");
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
-var shadow = { name: "", color: "", notes: {} };
+var shadow = { };
 
 var current = JSON.parse(JSON.stringify(shadow));
 

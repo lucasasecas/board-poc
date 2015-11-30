@@ -55,10 +55,11 @@ function randomString(length: number = 8) : string {
 })();
 
 interface INote {
-  title: string;
-  content: string;
-  posX: number;
-  posY: number;
+  id: string;
+  title?: string;
+  content?: string;
+  posX?: number;
+  posY?: number;
 }
 
 interface IDictionary<TValue> {
@@ -66,9 +67,9 @@ interface IDictionary<TValue> {
 }
 
 interface IBoard {
-  name: string;
-  color: string;
-  notes: IDictionary<INote>;
+  name?: string;
+  color?: string;
+  notes?: IDictionary<INote>;
 }
 
 interface INoteVMStyle {
@@ -79,10 +80,10 @@ interface INoteVMStyle {
 
 class NoteVM {
   id: string;
-  title = ko.observable("");
-  content = ko.observable("");
-  posX = ko.observable<number>(null);
-  posY = ko.observable<number>(null);
+  title = ko.observable<string>();
+  content = ko.observable<string>();
+  posX = ko.observable<number>(0);
+  posY = ko.observable<number>(0);
 
   style = ko.computed<INoteVMStyle>(() => {
     var posX = this.posX();
@@ -102,18 +103,30 @@ class NoteVM {
   }
 
   toPlain(): INote {
-    return {
-      title: this.title(),
-      content: this.content(),
-      posX: this.posX(),
-      posY: this.posY()
-    };
+    var result = { id: this.id };
+    AddTruthyValue(result, "title", this.title());
+    AddTruthyValue(result, "content", this.content());
+    AddNumberValue(result, "posX", this.posX());
+    AddNumberValue(result, "posY", this.posY());
+    return result;
+  }
+}
+
+function AddTruthyValue(destination: any, key: string, value: any) {
+  if (value) {
+    destination[key] = value;
+  }
+}
+
+function AddNumberValue(destination: any, key: string, value: number) {
+  if (Object.prototype.toString.call(value) == "[object Number]") {
+    destination[key] = value;
   }
 }
 
 class BoardVM {
-  name = ko.observable("");
-  color = ko.observable("");
+  name = ko.observable<string>();
+  color = ko.observable<string>();
   notes = ko.observableArray<NoteVM>([]);
 
   // TODO: consider to remove this index
@@ -164,15 +177,17 @@ class BoardVM {
   }
 
   toPlain(): IBoard {
-    var result = {
-      name: this.name(),
-      color: this.color(),
-      notes: <IDictionary<INote>>{}
-    };
-    var notes = result.notes;
-    for (var i in this.notes()) {
-      var noteVM = this.notes()[i];
-      notes[noteVM.id] = noteVM.toPlain();
+    var result = <IBoard>{ };
+    AddTruthyValue(result, "name", this.name());
+    AddTruthyValue(result, "color", this.color());
+    var noteVMs = this.notes();
+    if (noteVMs.length) {
+      var notes = <IDictionary<INote>>{};
+      for (var i in noteVMs) {
+        var noteVM = noteVMs[i];
+        notes[noteVM.id] = noteVM.toPlain();
+      }
+      result.notes = notes;
     }
     return result;
   }
@@ -180,7 +195,7 @@ class BoardVM {
 
 var board = new BoardVM();
 
-var shadow = { name: "", color: "", notes: <IDictionary<INote>>{} };
+var shadow = { };
 
 board.update(shadow);
 
