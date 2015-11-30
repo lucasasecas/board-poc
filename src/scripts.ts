@@ -193,11 +193,10 @@ class BoardVM {
   }
 }
 
+var shadowServer = { };
 var board = new BoardVM();
-
-var shadow = { };
-
-board.update(shadow);
+board.update(shadowServer);
+var shadowClient = board.toPlain();
 
 ko.applyBindings(board);
 
@@ -210,20 +209,26 @@ socket.on("board", function(msg: any){
     // refresh all the board
   } else if (msg.patch) {
     var current = board.toPlain();
-    rfc6902.applyPatch(shadow, msg.patch);
-    rfc6902.applyPatch(current, msg.patch);
-    //console.log({ received_patch: msg.patch, current: current, shadow: shadow });
+    //console.log({ received_patch1: msg.patch, current: current, shadowServer: shadowServer });
+    var myChanges = rfc6902.createPatch(shadowClient, current);
+    //console.log({ myChanges: myChanges });
+    rfc6902.applyPatch(shadowServer, JSON.parse(JSON.stringify(msg.patch)));
+    rfc6902.applyPatch(current, JSON.parse(JSON.stringify(msg.patch)));
+    rfc6902.applyPatch(current, JSON.parse(JSON.stringify(myChanges)));
+    //console.log({ received_patch2: msg.patch, current: current, shadowServer: shadowServer });
     board.update(current);
+    shadowClient = board.toPlain();
   }
 });
 
-var interval = 100;
+var interval = 1000;
 setInterval(() => {
   var current = board.toPlain();
-  var myChanges = rfc6902.createPatch(shadow, current);
+  var myChanges = rfc6902.createPatch(shadowServer, current);
   if (myChanges.length) {
+    shadowClient = current;
     // TODO: consider to send it using HTTP in place of Socket
     socket.emit("board", { patch: myChanges });
-    //console.log({ emit_patch: myChanges, current: current, shadow: shadow });
+    //console.log({ emit_patch: myChanges, current: current, shadowServer: shadowServer });
   }
 }, interval);
