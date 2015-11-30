@@ -61,10 +61,14 @@ interface INote {
   posY: number;
 }
 
+interface IDictionary<TValue> {
+  [id: string]: TValue;
+}
+
 interface IBoard {
   name: string;
   color: string;
-  notes: { [id: string]: INote; };
+  notes: IDictionary<INote>;
 }
 
 interface INoteVMStyle {
@@ -77,8 +81,8 @@ class NoteVM {
   id: string;
   title = ko.observable("");
   content = ko.observable("");
-  posX = ko.observable<number>();
-  posY = ko.observable<number>();
+  posX = ko.observable<number>(null);
+  posY = ko.observable<number>(null);
 
   style = ko.computed<INoteVMStyle>(() => {
     var posX = this.posX();
@@ -113,7 +117,7 @@ class BoardVM {
   notes = ko.observableArray<NoteVM>([]);
 
   // TODO: consider to remove this index
-  private notesById: { [id: string]: NoteVM; } = {};
+  private notesById: IDictionary<NoteVM> = {};
 
   newNote = () => {
     var note = this.createNote();
@@ -160,10 +164,10 @@ class BoardVM {
   }
 
   toPlain(): IBoard {
-    var result = <IBoard>{
+    var result = {
       name: this.name(),
       color: this.color(),
-      notes: {}
+      notes: <IDictionary<INote>>{}
     };
     var notes = result.notes;
     for (var i in this.notes()) {
@@ -176,29 +180,35 @@ class BoardVM {
 
 var board = new BoardVM();
 
-console.log("Applying binding...");
-
-ko.applyBindings(board);
-
-console.log("Add two notes...");
-
-var shadow = <IBoard>{};
+var shadow = { name: "", color: "", notes: <IDictionary<INote>>{} };
 
 board.update(shadow);
+
+ko.applyBindings(board);
 
 declare var io : any;
 
 var socket = io();
 
-var count = 0;
-var interval = 1000;
-var logInterval = 10000;
-setInterval(() => {
-  var myChanges = rfc6902.createPatch(shadow, board.toPlain());
-  if (myChanges.length) {
-    socket.emit("board", { patch: myChanges });
+socket.on("board", function(msg: any){
+  if (msg.board) {
+    // refresh all the board
+  } else if (msg.patch) {
+    var current = board.toPlain();
+    rfc6902.applyPatch(shadow, msg.patch);
+    rfc6902.applyPatch(current, msg.patch);
+    //console.log({ received_patch: msg.patch, current: current, shadow: shadow });
+    board.update(current);
   }
-  if (!(count++ % (logInterval / interval))) {
-    console.log(myChanges);
+});
+
+var interval = 100;
+setInterval(() => {
+  var current = board.toPlain();
+  var myChanges = rfc6902.createPatch(shadow, current);
+  if (myChanges.length) {
+    // TODO: consider to send it using HTTP in place of Socket
+    socket.emit("board", { patch: myChanges });
+    //console.log({ emit_patch: myChanges, current: current, shadow: shadow });
   }
 }, interval);
