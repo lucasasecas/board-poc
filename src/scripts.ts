@@ -210,11 +210,12 @@ socket.on("board", function(msg: any){
   } else if (msg.patch) {
     var current = board.toPlain();
     //console.log({ received_patch1: msg.patch, current: current, shadowServer: shadowServer });
+    var serverChanges = msg.patch;
     var myChanges = rfc6902.createPatch(shadowClient, current);
     //console.log({ myChanges: myChanges });
-    rfc6902.applyPatch(shadowServer, JSON.parse(JSON.stringify(msg.patch)));
-    rfc6902.applyPatch(current, JSON.parse(JSON.stringify(msg.patch)));
-    rfc6902.applyPatch(current, JSON.parse(JSON.stringify(myChanges)));
+    rfc6902.applyPatch(shadowServer, JSON.parse(JSON.stringify(serverChanges)));
+    rfc6902.applyPatch(current, serverChanges);
+    rfc6902.applyPatch(current, myChanges);
     //console.log({ received_patch2: msg.patch, current: current, shadowServer: shadowServer });
     board.update(current);
     shadowClient = board.toPlain();
@@ -226,7 +227,6 @@ setInterval(() => {
   var current = board.toPlain();
   var myChanges = rfc6902.createPatch(shadowServer, current);
   if (myChanges.length) {
-    shadowClient = current;
     // TODO: consider to send it using HTTP in place of Socket
     socket.emit("board", { patch: myChanges });
     //console.log({ emit_patch: myChanges, current: current, shadowServer: shadowServer });
