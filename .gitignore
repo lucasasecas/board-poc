@@ -3,5 +3,5 @@ node_modules/
 typings/
 npm-debug.log
 
-lib/**
-bower_components/**
+client/lib/**
+client/bower_components/**
