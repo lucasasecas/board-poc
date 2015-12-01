@@ -12,13 +12,16 @@
     "lib"
   ],
   "scripts": {
-    "test": "gulp test"
+    "test": "gulp test",
+    "start": "node server/server.js",
+    "postinstall": "bower install && tsd install && gulp build"
   },
   "dependencies": {
-    "rfc6902": "^1.0.8"
-  },
-  "devDependencies": {
+    "rfc6902": "^1.0.8",
     "del": "2.0.2",
+    "bower": "1.4.2", 
+    "typescript": "1.6.2",
+    "tsd": "0.6.5", 
     "gulp": "^3.9.0",
     "gulp-help": "^1.6.0",
     "gulp-inject": "3.0.0",
@@ -27,6 +30,8 @@
     "gulp-tslint": "^3.1",
     "express": "4.10.2",
     "socket.io": "1.2.0"
+  },
+  "devDependencies": {
   },
   "engines": {
     "node": ">=0.12.0"
