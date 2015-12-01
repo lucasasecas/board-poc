@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "noImplicitAny": true,
-    "outFile": "./lib/scripts.js",
+    "outFile": "./client/lib/scripts.js",
     "preserveConstEnums": true,
     "removeComments": true
   },

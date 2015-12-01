@@ -1,7 +1,7 @@
 var rfc6902 = require("rfc6902");
 var express = require("express"); 
 var app = express();
-app.use(express.static(__dirname));
+app.use(express.static(__dirname + "/../client"));
 
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
@@ -11,7 +11,7 @@ var shadow = { };
 var current = JSON.parse(JSON.stringify(shadow));
 
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/../client/index.html');
 });
 
 io.on("connection", function(socket){
