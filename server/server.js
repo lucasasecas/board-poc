@@ -16,14 +16,13 @@ app.get('/', function(req, res){
 
 io.on("connection", function(socket){
   console.log("connection");
+
+  // TODO: send current board at first connection in place of clean all
   current = { };
-  // TODO: send current board at first connection
+
   socket.on("board", function(msg){
     if (msg.patch) {
-      //var previous = JSON.parse(JSON.stringify(shadow));
       var output = rfc6902.applyPatch(current, msg.patch);
-      //console.log({ received_patch: msg.patch, current: current, shadow: shadow, output: output });
-      //console.log({ current_notes: current.notes, shadow_notes: shadow.notes });
     }
   });
 });
@@ -33,7 +32,6 @@ setInterval(function() {
   // I am clonnig patch because the created objects has the same reference 
   var changes = JSON.parse(JSON.stringify(rfc6902.createPatch(shadow, current)));
   if (changes.length) {
-    //console.log({ emit_patch: changes, current: current, shadow: shadow });
     rfc6902.applyPatch(shadow, changes);
     io.emit("board", { patch: changes });
   }
