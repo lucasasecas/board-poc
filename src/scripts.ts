@@ -55,7 +55,6 @@ function randomString(length: number = 8) : string {
 })();
 
 interface INote {
-  id: string;
   title?: string;
   content?: string;
   posX?: number;
@@ -103,7 +102,7 @@ class NoteVM {
   }
 
   toPlain(): INote {
-    var result = { id: this.id };
+    var result = { };
     AddTruthyValue(result, "title", this.title());
     AddTruthyValue(result, "content", this.content());
     AddNumberValue(result, "posX", this.posX());
