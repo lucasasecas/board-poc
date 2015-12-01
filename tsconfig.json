@@ -10,9 +10,13 @@
     "src/**/*.ts"
   ],
   "files": [
-    "src\\greeter.ts",
-    "src\\scripts.ts",
+    "src\\app.ts",
+    "src\\model.ts",
+    "src\\utils.ts",
+    "src\\view-model.ts",
     "src\\_defaults.d.ts",
-    "src\\_tsd.d.ts"
+    "src\\_tsd.d.ts",
+    "src\\kobindings\\dragndrop.ts",
+    "src\\zzzMain\\main.ts"
   ]
 }
