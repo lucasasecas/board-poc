@@ -16,6 +16,7 @@ app.get('/', function(req, res){
 
 io.on("connection", function(socket){
   console.log("connection");
+  current = { };
   // TODO: send current board at first connection
   socket.on("board", function(msg){
     if (msg.patch) {
