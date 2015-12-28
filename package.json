@@ -14,14 +14,14 @@
   "scripts": {
     "test": "gulp test",
     "start": "node server/server.js",
-    "postinstall": "bower install && tsd install && gulp build"
+    "postinstall": "bower install && tsd update --save --overwrite && gulp build"
   },
   "dependencies": {
     "rfc6902": "^1.0.8",
     "del": "2.0.2",
-    "bower": "1.4.2", 
+    "bower": "1.4.2",
     "typescript": "1.6.2",
-    "tsd": "0.6.5", 
+    "tsd": "0.6.5",
     "gulp": "^3.9.0",
     "gulp-help": "^1.6.0",
     "gulp-inject": "3.0.0",
