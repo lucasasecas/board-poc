@@ -7,4 +7,3 @@ client/lib/**
 client/bower_components/**
 
 src/_tsd.ts
-tsconfig.json

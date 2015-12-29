@@ -10,7 +10,14 @@
     "src/**/*.ts"
   ],
   "files": [
-
+    "src/_defaults.d.ts",
+    "src/_tsd.d.ts",
+    "src/app.ts",
+    "src/kobindings/dragndrop.ts",
+    "src/model.ts",
+    "src/utils.ts",
+    "src/view-model.ts",
+    "src/zzzMain/main.ts"
   ],
   "atom": {
     "rewriteTsconfig": true
