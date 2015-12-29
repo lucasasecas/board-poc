@@ -17,22 +17,22 @@
     "postinstall": "bower install && tsd update --save --overwrite && gulp build"
   },
   "dependencies": {
-    "rfc6902": "^1.0.8",
-    "del": "2.0.2",
     "bower": "1.4.2",
-    "typescript": "1.6.2",
-    "tsd": "0.6.5",
+    "del": "2.0.2",
+    "express": "4.10.2",
     "gulp": "^3.9.0",
     "gulp-help": "^1.6.0",
     "gulp-inject": "3.0.0",
+    "gulp-rename": "^1.2.2",
     "gulp-sequence": "0.4.1",
     "gulp-tsconfig-files": "0.0.2",
     "gulp-tslint": "^3.1",
-    "express": "4.10.2",
-    "socket.io": "1.2.0"
+    "rfc6902": "^1.0.8",
+    "socket.io": "1.2.0",
+    "tsd": "0.6.5",
+    "typescript": "1.6.2"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "engines": {
     "node": ">=0.12.0"
   }
