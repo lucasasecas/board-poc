@@ -11,5 +11,5 @@ Try it on http://board-poc.herokuapp.com/ (the board is clean on new connections
 ```
 npm install -g typescript
 ```
-3. Run `npm install`. With that will be installed all node dependencies, front-end dependencies useng [bower](http://bower.io/) and will be compiled all typescript files.
+3. Run `npm install`. With that will be installed all node dependencies, front-end dependencies using [bower](http://bower.io/) and will be compiled all typescript files.
 4. Finally should be run `npm start`.
