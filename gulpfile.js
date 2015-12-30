@@ -6,7 +6,7 @@ var tsconfig = require('gulp-tsconfig-files');
 var path = require('path');
 var inject = require('gulp-inject');
 var gulpSequence = require('gulp-sequence');
-var rename  = require('gulp-rename');
+var rename = require('gulp-rename');
 var del = require('del');
 
 var tsFilesGlob = (function (c) {
