@@ -6,13 +6,17 @@ var tsconfig = require('gulp-tsconfig-files');
 var path = require('path');
 var inject = require('gulp-inject');
 var gulpSequence = require('gulp-sequence');
+var rename = require('gulp-rename');
 var del = require('del');
 
 var tsFilesGlob = (function (c) {
   return c.filesGlob || c.files || '**/*.ts';
-})(require('./tsconfig.json'));
+})(require('./tsconfig.base.json'));
 
 gulp.task('tsconfig_files', 'Update files section in tsconfig.json', function () {
+  gulp.src('tsconfig.base.json')
+    .pipe(rename('tsconfig.json'))
+    .pipe(gulp.dest('.'));
   gulp.src(tsFilesGlob).pipe(tsconfig());
 });
 
@@ -50,4 +54,3 @@ gulp.task('_build', 'INTERNAL TASK - Compiles all TypeScript source files', func
 
 //run tslint task, then run _tsconfig_files and _gen_tsrefs in parallel, then run _build
 gulp.task('build', 'Compiles all TypeScript source files and updates module references', gulpSequence('tslint', ['tsconfig_files', 'gen_tsrefs'], '_build'));
-
