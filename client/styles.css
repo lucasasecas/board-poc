@@ -1,7 +1,14 @@
+body{
+  margin: 0;
+  padding: 0;
+    background: url('img/cork.jpg');
+}
+
 .board {
   height: 500px;
   width: 100%;
   position: relative;
+
 }
 
 .note {

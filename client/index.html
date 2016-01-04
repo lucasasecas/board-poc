@@ -11,7 +11,7 @@
 <body>
 
   <div>
-    <ul>
+    <ul >
       <li><label>Name:<input type="text" data-bind="textInput: name" /></label></li>
       <li><label>Color:<input type="text" data-bind="textInput: color" /></label></li>
       <li><button data-bind="click: newNote">New note</button></li>
@@ -25,13 +25,13 @@
       </ul>
     </div>
   </div>
-  
+
   Plain:
   <pre data-bind="text: ko.toJSON($root.toPlain(), null, 2)"></pre>
-  
+
   ViewModel
   <pre data-bind="text: ko.toJSON($root, null, 2)"></pre>
-  
+
   <script src="bower_components/socket.io-client/socket.io.js"></script>
   <script src="https://cdn.rawgit.com/chbrown/rfc6902/v1.0.6/rfc6902.js"></script>
   <script src="bower_components/knockout/dist/knockout.js"></script>
