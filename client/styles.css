@@ -11,29 +11,34 @@ body{
 
 }
 
-.note {
+.note{
   position: absolute;
-  background-color: yellow;
-
 }
 
-.text-editable{
-  cursor: text
+.note h2,p{
+  font-size:100%;
+  font-weight:normal;
+}
+ ul.note, ul.note li{
+  list-style:none;
+}
+ul.note{
+  overflow:hidden;
+  padding:0;
 }
 
-.note textarea{
-  background: yellow;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  cursor: pointer;
+ul.note li {
+  text-decoration:none;
+  color:#000;
+  background:#ffc;
+  display:block;
+  min-height:10em;
+  min-width:10em;
+  padding:1em;
 }
-
-ul.note,
-ul.note > li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+ul.note li{
+  margin:0;
+  float:left;
 }
 
 ul.nav-horizontal {
