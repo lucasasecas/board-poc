@@ -9,7 +9,11 @@
 </head>
 
 <body>
-
+  <ul class="nav-horizontal">
+    <li>Logo</li>
+    <li><a href="#">Add Note</a></li>
+    <li><a href="#">Clear Board</a></li>
+  </ul>
   <div>
     <ul>
       <li><label>Name:<input type="text" data-bind="textInput: name" /></label></li>
@@ -23,9 +27,10 @@
         <li><p class="text-editable" data-bind="jeditable: content, jeditableOptions: {}" >Inner text</p></li>
         <!-- <li><label>PosX:<input type="text" data-bind="textInput: posX" /></label></li>
         <li><label>PosY:<input type="text" data-bind="textInput: posY" /></label></li> -->
+      </ul>
       </div>
     </div>
-  </div>
+
 
   Plain:
   <pre data-bind="text: ko.toJSON($root.toPlain(), null, 2)"></pre>
